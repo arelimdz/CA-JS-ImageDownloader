@@ -29,8 +29,15 @@ function downloadPokemonPicture(targetId = getRandomPokemonId()){
 			// Step 1: get the image URL 
 			let newUrl = await getPokemonPictureUrl(targetId); 
 
+            // Step 1b: Get the Pokemon name 
+			let pokemonName = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetId).then(async (response) => {
+				return await response.json();
+			}).then(json => {
+				return json.name;
+			})
+
 			// Step 2: do the download 
-			let savedFileLocation = await savePokemonPictureToDisk(newUrl, "ExampleImage.png", "storage");
+			let savedFileLocation = await savePokemonPictureToDisk(newUrl, `${pokemonName}-${targetId}.png`, "storage");
 			// return savedFileLocation;
 			resolve(savedFileLocation);
 
